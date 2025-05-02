@@ -14,7 +14,7 @@ const tonesList = [
   "Dreamy", "Gentle", "Funny", "Mysterious", "Poetic", "Uplifting", "Soothing"
 ];
 
-export default function StoryForm({ handleGenerate }) {
+export default function StoryForm({ handleGenerate, creditsLeft }) {
   const [value, setValue] = useState("");
   const [showCultures, setShowCultures] = useState(false);
   const [cultures, setCultures] = useState([]);
@@ -153,13 +153,34 @@ export default function StoryForm({ handleGenerate }) {
 
         {/* Submit */}
         <div className="pt-2">
-          <button
-            type="submit"
-            className="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 text-lg rounded-xl font-bold transition-all duration-200 transform hover:scale-[1.02] shadow-md"
-          >
-            🚀 Generate My Story
-          </button>
+        <button
+          disabled={creditsLeft <= 0}
+          className={`w-full py-3 rounded-xl font-bold transition ${
+            creditsLeft <= 0
+              ? "bg-gray-400 cursor-not-allowed"
+              : "bg-indigo-600 hover:bg-indigo-700 text-white"
+          }`}
+        >
+          🚀 Generate My Story
+        </button>
         </div>
+        {creditsLeft !== null && (
+          <div className="mt-4 text-center text-sm text-indigo-500 space-y-2">
+            {creditsLeft > 0 ? (
+              <>
+                <p>✨ You have <strong>{creditsLeft}</strong> free stor{creditsLeft === 1 ? "y" : "ies"} left.</p>
+                <p className="text-indigo-400">Make each one magical! Choose meaningful values and cultures to explore.</p>
+              </>
+            ) : (
+              <>
+                <p className="text-red-500 font-semibold">🚫 You've reached your free story limit.</p>
+                <p className="text-indigo-400">
+                  Follow us on social media or come back tomorrow to unlock more stories!
+                </p>
+              </>
+            )}
+          </div>
+        )}
       </form>
     </div>
   );

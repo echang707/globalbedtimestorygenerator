@@ -1,8 +1,10 @@
 import { useState } from "react";
 import StoryForm from "./StoryForm";
+import { useEffect } from "react";
 import { useRef } from "react";
 import html2pdf from "html2pdf.js";
 import { cultureTemplates } from "../data/cultureTemplates";
+import SavedStories from "./SavedStories";
 
 export default function StoryGenerator() {
   const storyRef = useRef();
@@ -10,11 +12,38 @@ export default function StoryGenerator() {
   const [loading, setLoading] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
   const [lastStoryData, setLastStoryData] = useState(null);
-
+  const MAX_FREE_STORIES = 3;
+  const [creditsLeft, setCreditsLeft] = useState(() => {
+    return MAX_FREE_STORIES - Number(localStorage.getItem("storyCredits") || 0);
+  });
+  
+  
+  useEffect(() => {
+    const today = new Date().toDateString();
+    const lastUsed = localStorage.getItem("lastStoryUseDate");
+  
+    if (lastUsed !== today) {
+      localStorage.setItem("storyCredits", "0");
+      localStorage.setItem("lastStoryUseDate", today);
+      setCreditsLeft(MAX_FREE_STORIES);
+    } else {
+      const used = Number(localStorage.getItem("storyCredits") || 0);
+      setCreditsLeft(MAX_FREE_STORIES - used); // ← ensures it's always in sync
+    }
+  }, []);
+  
 
 const handleGenerate = async ({ value, cultures, tone, childName }) => {
     setLoading(true);
     setStory(null);
+    const usedCount = Number(localStorage.getItem("storyCredits") || 0);
+    if (usedCount >= MAX_FREE_STORIES) {
+      alert("You've reached your free story limit! ✨ Follow us or come back later for more.");
+      return;
+    }
+
+  localStorage.setItem("storyCredits", usedCount + 1);
+  setCreditsLeft(MAX_FREE_STORIES - (usedCount + 1)); // ← this was missing
   
   
     const cultureData = cultureTemplates[cultures[0]];
@@ -77,12 +106,13 @@ const handleGenerate = async ({ value, cultures, tone, childName }) => {
     }
   };
   
-  const saveStory = (storyText) => {
+  const saveStory = (storyText, metadata = {}) => {
     const savedStories = JSON.parse(localStorage.getItem("tigerCubStories") || "[]");
     const newEntry = {
       id: Date.now(),
       story: storyText,
       savedAt: new Date().toLocaleString(),
+      ...metadata,
     };
     localStorage.setItem("tigerCubStories", JSON.stringify([...savedStories, newEntry]));
     alert("✅ Story saved! You can view it later.");
@@ -127,6 +157,12 @@ const handleGenerate = async ({ value, cultures, tone, childName }) => {
     html2pdf().set(opt).from(element).save();
   };
 
+  const handleContinueSavedStory = (storyData) => {
+    setLastStoryData(storyData);
+    setStory(storyData.story); // Load the saved part into view
+  };
+  
+
   const handleContinueStory = async () => {
     if (!lastStoryData) return;
   
@@ -149,6 +185,7 @@ const handleGenerate = async ({ value, cultures, tone, childName }) => {
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${import.meta.env.VITE_OPENAI_API_KEY}`,
+          "OpenAI-Organization": import.meta.env.VITE_OPENAI_ORG, // ← add this
         },
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
@@ -170,12 +207,16 @@ const handleGenerate = async ({ value, cultures, tone, childName }) => {
     } finally {
       setLoading(false);
     }
+    const newCount = Number(localStorage.getItem("storyCredits") || 0) + 1;
+    localStorage.setItem("storyCredits", newCount);
+    setCreditsLeft(MAX_FREE_STORIES - newCount);
   };
   
   
+
   return (
     <div className="p-6">
-      <StoryForm handleGenerate={handleGenerate} />
+      <StoryForm handleGenerate={handleGenerate} creditsLeft={creditsLeft} />
 
       {loading && (
         <div className="text-center mt-6 text-lg text-indigo-600 animate-pulse">
@@ -219,7 +260,7 @@ const handleGenerate = async ({ value, cultures, tone, childName }) => {
       )}
 
       <button
-        onClick={() => saveStory(story)}
+        onClick={() => saveStory(story, lastStoryData)}
         className="bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition-all duration-200"
       >
         💾 Save This Story
