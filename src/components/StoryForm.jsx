@@ -36,7 +36,7 @@ export default function StoryForm({ handleGenerate, creditsLeft }) {
   };
 
   return (
-    <div className="w-full mx-auto mt-10 px-4 sm:px-6 md:px-8">
+    <div className="w-full max-w-3xl mx-auto mt-10 px-4 sm:px-6 md:px-8">
       <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center text-indigo-800 mb-3">
         🌙 Global Bedtime Story Builder
       </h1>
