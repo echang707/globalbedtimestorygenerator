@@ -1,6 +1,5 @@
 import { useState } from "react";
-import { culturesList } from "../data/culturesList"; 
-
+import { culturesList } from "../data/culturesList";
 
 const valuesList = [
   "Kindness", "Gratitude", "Bravery", "Patience", "Perseverance",
@@ -8,7 +7,6 @@ const valuesList = [
   "Creativity", "Responsibility", "Family", "Generosity", "Curiosity",
   "Problem-Solving", "Teamwork", "Compassion", "Self-Discovery", "Love"
 ];
-
 
 const tonesList = [
   "Dreamy", "Gentle", "Funny", "Mysterious", "Poetic", "Uplifting", "Soothing"
@@ -38,17 +36,17 @@ export default function StoryForm({ handleGenerate, creditsLeft }) {
   };
 
   return (
-    <div className="max-w-3xl mx-auto mt-12 px-4">
-      <h1 className="text-4xl font-extrabold text-center text-indigo-800 mb-2">
+    <div className="w-full mx-auto mt-10 px-4 sm:px-6 md:px-8">
+      <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold text-center text-indigo-800 mb-3">
         🌙 Global Bedtime Story Builder
       </h1>
-      <p className="text-center text-indigo-500 font-medium mb-10">
+      <p className="text-center text-indigo-500 font-medium mb-10 text-base sm:text-lg">
         Craft a magical tale filled with culture, values, and wonder ✨
       </p>
 
       <form
         onSubmit={submitForm}
-        className="bg-white/95 backdrop-blur-lg p-8 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] space-y-8 border border-gray-100"
+        className="bg-white/95 backdrop-blur-lg p-4 sm:p-6 md:p-8 rounded-3xl shadow-[0_20px_50px_rgba(0,0,0,0.1)] space-y-8 border border-gray-100"
       >
         {/* Value */}
         <div>
@@ -67,52 +65,52 @@ export default function StoryForm({ handleGenerate, creditsLeft }) {
           </select>
         </div>
 
-        {/* 🌏 Culture Selection Section */}
-        <div className="mt-8">
-          <h2 className="text-2xl font-bold text-indigo-800 mb-4 text-center">🌏 Choose Your Story’s Culture</h2>
-
+        {/* Culture */}
+        <div>
+          <h2 className="text-2xl font-bold text-indigo-800 mb-4 text-center">
+            🌏 Choose Your Story’s Culture
+          </h2>
           {!showCultures ? (
             <div className="flex justify-center">
               <button
+                type="button"
                 onClick={() => setShowCultures(true)}
-                className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition-all duration-300"
+                className="bg-indigo-500 hover:bg-indigo-600 text-white px-6 py-3 rounded-xl font-semibold shadow-md transition"
               >
                 🌟 See Cultures
               </button>
             </div>
           ) : (
-            <div className="mt-6 animate-fade-in">
-            {/* ADD THIS NEW HIDE BUTTON */}
-            <div className="flex justify-center mb-6">
-              <button
-                onClick={() => setShowCultures(false)}
-                className="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-semibold transition-all duration-300"
-              >
-                🙈 Hide Cultures
-              </button>
-            </div>
-            
-            <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mt-6">
-              {culturesList.map((culture) => (
-                <div
-                  key={culture.name}
-                  onClick={() => toggleCulture(culture.name)}
-                  className={`cursor-pointer p-4 rounded-xl border text-center shadow-md transition-all duration-200 ${
-                    cultures.includes(culture.name)
-                      ? "bg-indigo-600 text-white ring-2 ring-indigo-300 scale-105"
-                      : "bg-white text-gray-800 hover:bg-gray-100"
-                  }`}
+            <div className="animate-fade-in">
+              <div className="flex justify-center mb-6">
+                <button
+                  type="button"
+                  onClick={() => setShowCultures(false)}
+                  className="bg-red-400 hover:bg-red-500 text-white px-4 py-2 rounded-lg font-semibold transition"
                 >
-                  <div className="text-3xl mb-2">{culture.emoji}</div>
-                  <div className="font-bold">{culture.name}</div>
-                  <div className="text-sm mt-1">{culture.shortDescription}</div>
-                </div>
-              ))}
-            </div>
+                  🙈 Hide Cultures
+                </button>
+              </div>
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+                {culturesList.map((culture) => (
+                  <div
+                    key={culture.name}
+                    onClick={() => toggleCulture(culture.name)}
+                    className={`cursor-pointer p-4 rounded-xl border text-center shadow-md transition ${
+                      cultures.includes(culture.name)
+                        ? "bg-indigo-600 text-white ring-2 ring-indigo-300 scale-105"
+                        : "bg-white text-gray-800 hover:bg-gray-100"
+                    }`}
+                  >
+                    <div className="text-3xl mb-2">{culture.emoji}</div>
+                    <div className="font-bold">{culture.name}</div>
+                    <div className="text-sm mt-1">{culture.shortDescription}</div>
+                  </div>
+                ))}
+              </div>
             </div>
           )}
         </div>
-
 
         {/* Tone */}
         <div>
@@ -125,7 +123,7 @@ export default function StoryForm({ handleGenerate, creditsLeft }) {
                 key={t}
                 type="button"
                 onClick={() => setTone(t)}
-                className={`px-4 py-2 rounded-full font-medium transition-all duration-200 transform hover:scale-[1.02] border shadow-sm ${
+                className={`px-4 py-2 rounded-full font-medium transition transform hover:scale-[1.02] border shadow-sm ${
                   tone === t
                     ? "bg-purple-600 text-white scale-105 ring-2 ring-purple-300 shadow-[0_0_10px_rgba(139,92,246,0.5)]"
                     : "bg-gray-100 text-gray-700 border-gray-300 hover:bg-gray-200"
@@ -137,7 +135,7 @@ export default function StoryForm({ handleGenerate, creditsLeft }) {
           </div>
         </div>
 
-        {/* Child Name */}
+        {/* Name */}
         <div>
           <label className="block text-lg font-semibold text-indigo-700 mb-2">
             🧒 Child’s Name (optional)
@@ -152,20 +150,22 @@ export default function StoryForm({ handleGenerate, creditsLeft }) {
         </div>
 
         {/* Submit */}
-        <div className="pt-2">
-        <button
-          disabled={creditsLeft <= 0}
-          className={`w-full py-3 rounded-xl font-bold transition ${
-            creditsLeft <= 0
-              ? "bg-gray-400 cursor-not-allowed"
-              : "bg-indigo-600 hover:bg-indigo-700 text-white"
-          }`}
-        >
-          🚀 Generate My Story
-        </button>
+        <div>
+          <button
+            disabled={creditsLeft <= 0}
+            className={`w-full py-3 rounded-xl font-bold transition ${
+              creditsLeft <= 0
+                ? "bg-gray-400 cursor-not-allowed"
+                : "bg-indigo-600 hover:bg-indigo-700 text-white"
+            }`}
+          >
+            🚀 Generate My Story
+          </button>
         </div>
+
+        {/* Credit Note */}
         {creditsLeft !== null && (
-          <div className="mt-4 text-center text-sm text-indigo-500 space-y-2">
+          <div className="text-center text-sm text-indigo-500 space-y-2">
             {creditsLeft > 0 ? (
               <>
                 <p>✨ You have <strong>{creditsLeft}</strong> free stor{creditsLeft === 1 ? "y" : "ies"} left.</p>
@@ -174,9 +174,7 @@ export default function StoryForm({ handleGenerate, creditsLeft }) {
             ) : (
               <>
                 <p className="text-red-500 font-semibold">🚫 You've reached your free story limit.</p>
-                <p className="text-indigo-400">
-                  Follow us on social media or come back tomorrow to unlock more stories!
-                </p>
+                <p className="text-indigo-400">Follow us or come back tomorrow to unlock more stories!</p>
               </>
             )}
           </div>
