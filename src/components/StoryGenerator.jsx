@@ -65,6 +65,8 @@ const handleGenerate = async ({ value, cultures, tone, childName }) => {
     }
     
     Make the story feel like it could be passed down through generations.
+
+    Make sure this version feels **fresh**, imaginative, and unlike any previous telling.
     
     Use inspiration (not copying) from classics such as:
     ${cultureData.classicSummaries
@@ -82,7 +84,7 @@ const handleGenerate = async ({ value, cultures, tone, childName }) => {
         body: JSON.stringify({
           model: "gpt-3.5-turbo",
           messages: [{ role: "user", content: prompt }],
-          temperature: 0.85,
+          temperature: 0.95,
         }),
       });
   
