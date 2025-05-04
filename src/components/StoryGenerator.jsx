@@ -3,7 +3,7 @@ import StoryForm from "./StoryForm";
 import { useEffect } from "react";
 import { useRef } from "react";
 import html2pdf from "html2pdf.js";
-import { cultureTemplates } from "../data/CultureTemplates.js";
+import { cultureTemplates } from "../data/cultureTemplates.js";
 import SavedStories from "./SavedStories";
 
 export default function StoryGenerator() {
@@ -47,6 +47,10 @@ const handleGenerate = async ({ value, cultures, tone, childName }) => {
   
   
     const cultureData = cultureTemplates[cultures[0]];
+    if (!cultureData) {
+      alert("Something went wrong. This culture isn't supported right now.");
+      return;
+    }
 
 
     const prompt = `
