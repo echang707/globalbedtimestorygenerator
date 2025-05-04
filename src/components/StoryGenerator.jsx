@@ -3,7 +3,7 @@ import StoryForm from "./StoryForm";
 import { useEffect } from "react";
 import { useRef } from "react";
 import html2pdf from "html2pdf.js";
-import { cultureTemplates } from "../data/cultureTemplates.js";
+import { cultureTemplates } from "../data/cultureTemplates";
 import SavedStories from "./SavedStories";
 
 export default function StoryGenerator() {
