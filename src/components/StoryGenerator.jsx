@@ -3,7 +3,7 @@ import StoryForm from "./StoryForm";
 import { useEffect } from "react";
 import { useRef } from "react";
 import html2pdf from "html2pdf.js";
-import { cultureTemplates } from "../data/cultureTemplates";
+import { CultureTemplates } from "../data/CultureTemplates";
 import SavedStories from "./SavedStories";
 
 export default function StoryGenerator() {
@@ -46,7 +46,7 @@ const handleGenerate = async ({ value, cultures, tone, childName }) => {
   setCreditsLeft(MAX_FREE_STORIES - (usedCount + 1)); // ← this was missing
   
   
-    const cultureData = cultureTemplates[cultures[0]];
+    const cultureData = CultureTemplates[cultures[0]];
     if (!cultureData) {
       alert("Something went wrong. This culture isn't supported right now.");
       return;

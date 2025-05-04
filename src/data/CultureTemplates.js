@@ -1,4 +1,4 @@
-export const cultureTemplates = {
+export const CultureTemplates = {
 Inuit: {
   representativeWorks: [
     "The Legend of Sedna",
